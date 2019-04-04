@@ -36,7 +36,6 @@ public class UserBaseInfoServiceImpl implements UserBaseInfoService {
         userBaseInfo.setCreateDate(new Date());
         userBaseInfo.setUpdateDate(new Date());
         dao.insert(userBaseInfo);
-        //int n = dao.insert(dto);
         return "0";
     }
 

@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Table(name="user_base_info")
 public class UserBaseInfo extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 5868261466111685585L;
-    private String ubiId;
+    private String ubiLoginName;
     private String ubiName;
     private String ubiPassword ;
     private String ubiCertType;
@@ -19,5 +19,5 @@ public class UserBaseInfo extends BaseEntity implements Serializable {
     private String ubiMobile;
     private String ubiEmail;
     private String ubiAddress;
-    private String ubiLoginName;
+
 }

@@ -22,9 +22,10 @@
         <result column="del_flag" property="delFlag" jdbcType="VARCHAR"/>
     </resultMap>
 
-    <select id="1loginSelect" resultType="com.example.demo.model.entry.UserBaseInfo">
+    <select id="loginSelect" resultType="com.example.demo.model.entry.UserBaseInfo">
         select *
         from user_base_info
+        where ubi_login_name
     </select>
 
     <select id="1loginSelectById" resultMap="BaseResultMap">

@@ -1,4 +1,4 @@
-package com.example.util;
+package com.example.demo.util;
 
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;

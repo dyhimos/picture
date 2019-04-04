@@ -2,10 +2,11 @@ package com.example.demo.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.example.demo.dao.UserBaseInfoDao;
+import com.example.demo.exception.UserBizException;
 import com.example.demo.model.dto.UserLoginDto;
 import com.example.demo.model.entry.UserBaseInfo;
 import com.example.demo.service.UserBaseInfoService;
-import com.example.util.UUIDUtil;
+import com.example.demo.util.UUIDUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,10 @@ public class UserBaseInfoServiceImpl implements UserBaseInfoService {
      *
      * @param
      */
-    public String addUser(UserBaseInfo dto){
-        log.info("----- 进入添加用户流程，输入参数： "+ JSONObject.toJSONString(dto));
+    public String addUser(UserBaseInfo dto) {
+        log.info("----- 进入添加用户流程，输入参数： " + JSONObject.toJSONString(dto));
         UserBaseInfo userBaseInfo = new UserBaseInfo();
-        BeanUtils.copyProperties(dto,userBaseInfo);
+        BeanUtils.copyProperties(dto, userBaseInfo);
         userBaseInfo.setId(UUIDUtil.getRandom32PK());
         userBaseInfo.setCreateDate(new Date());
         userBaseInfo.setUpdateDate(new Date());
@@ -46,23 +47,23 @@ public class UserBaseInfoServiceImpl implements UserBaseInfoService {
      * @param
      */
     public UserLoginDto loginIn(UserLoginDto dto) {
-        try {
-            dao.loginSelect(dto);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        log.info("----- 进入登录流程，输入参数：" + JSONObject.toJSONString(dto));
+        UserBaseInfo temp = new UserBaseInfo();
+        temp.setUbiLoginName(dto.getUbiLoginName());
         UserBaseInfo userBaseInfo = null;
         try {
-            userBaseInfo = dao.loginSelectById(dto.getLoginId());
+            userBaseInfo = dao.selectOne(temp);
         } catch (Exception e) {
             e.printStackTrace();
+            throw new UserBizException("用户名或密码错误！");
         }
-        UserBaseInfo userBaseInfo1 = new UserBaseInfo();
-        userBaseInfo1.setId(dto.getLoginId());
-        //dao.insert(userBaseInfo);
-
-        log.info("-----" + JSONObject.toJSONString(userBaseInfo));
-        return null;
+        if(dto.getPassword().equals(userBaseInfo.getUbiPassword())){
+            BeanUtils.copyProperties(userBaseInfo,dto);
+        }else{
+            throw new UserBizException("用户名或密码错误！");
+        }
+        log.info("----- 登录结果：" + JSONObject.toJSONString(dto));
+        return dto;
     }
 
 }
